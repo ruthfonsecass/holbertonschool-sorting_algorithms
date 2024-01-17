@@ -1,7 +1,7 @@
 #include "sort.h"
 
 /**
- * lomutoPartition - Implements the Lomuto partition scheme for quicksort
+ * lomuto_partition - Implements the Lomuto partition scheme for quicksort
  * @arr: The array to be sorted
  * @low: The starting index of the segment of the array to be sorted
  * @high: The ending index of the segment of the array to be sorted
@@ -10,51 +10,58 @@
  * Return: The partitioning index
  */
 
-int lomutoPartition(int arr[], int low, int high, size_t size)
+int lomuto_partition(int *arr, int low, int high, size_t size)
 {
 	int pivot = arr[high];
 	int i = low;
 	int j;
-	int tmp;
-	(void) size;
+	int temp;
 
-	for (j = low; j <= high - 1; j++)
+	for (j = low; j < high; j++)
 	{
 		if (arr[j] <= pivot)
 		{
-			tmp = arr[i];
-			arr[i] = arr[j];
-			arr[j] = tmp;
+			if (i != j)
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+
+				print_array(arr, size);
+			}
 			i++;
 		}
 	}
-	tmp = arr[i];
-	arr[i] = arr[high];
-	arr[high] = tmp;
+	if (i != high)
+	{
+		temp = arr[i];
+		arr[i] = arr[high];
+		arr[high] = temp;
+
+		print_array(arr, size);
+	}
 
 	return (i);
 }
 
-
 /**
- * quickSortRecursive - A recursive helper function for quick_sort
+ * quick_sort_recursive - A recursive helper function for quick_sort
  * @arr: The array to be sorted
  * @low: The starting index of the current segment
  * @high: The ending index of the current segment
  * @size: the size of the array
  */
 
-void quickSortRecursive(int arr[], int low, int high, size_t size)
+void quick_sort_recursive(int arr[], int low, int high, size_t size)
 {
 	int partitioning_index;
 
 	if (low < high)
 	{
-		partitioning_index = lomutoPartition(arr, low, high, size);
+		partitioning_index = lomuto_partition(arr, low, high, size);
 
-		quickSortRecursive(arr, low, partitioning_index - 1, size);
-		print_array(arr, size);
-		quickSortRecursive(arr, partitioning_index + 1, high, size);
+		quick_sort_recursive(arr, low, partitioning_index - 1, size);
+		quick_sort_recursive(arr, partitioning_index + 1, high, size);
 	}
 }
 
@@ -69,7 +76,5 @@ void quickSortRecursive(int arr[], int low, int high, size_t size)
 void quick_sort(int *array, size_t size)
 {
 	if (size > 1)
-		quickSortRecursive(array, 0, size - 1, size);
-	print_array(array, size);
+		quick_sort_recursive(array, 0, size - 1, size);
 }
-
